@@ -1,5 +1,6 @@
 """Tkinter."""
 from tkinter import *
+import ast
 
 root = Tk()
 root.title("Calculator", )
@@ -40,6 +41,19 @@ def undo():
     else:
         delete__display()
         display.insert(0, "Error")
+
+def calculate():
+    """Calculator"""
+    display__state = display.get()
+    try:
+        math__expression = ast.parse(display__state, mode=eval)
+        expres__node = ast.Expression(math__expression.body)
+        result = eval(expres__node)
+        delete__display()
+        display.insert(0, result)
+    except TypeError as indetifier:
+      delete__display()
+      display.insert(0, "Error")
 
 
 # - Buttons
@@ -95,7 +109,7 @@ Button(root, text="(", command=lambda: get__operator(
     "(")).grid(row=4, column=4, sticky=W+E)
 Button(root, text=")", command=lambda: get__operator(
     ")")).grid(row=4, column=5, sticky=W+E)
-Button(root, text="=").grid(row=5, column=4, sticky=W+E, columnspan=2)
+Button(root, text="=", command=lambda: calculate()).grid(row=5, column=4, sticky=W+E, columnspan=2)
 
 # - ROOT UI
 root.mainloop()
